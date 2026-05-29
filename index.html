@@ -28,9 +28,9 @@
         
         /* Interactive Brand Header */
         header { text-align: center; margin-bottom: 2.5rem; display: flex; flex-direction: column; align-items: center; }
-        .logo-container { margin-bottom: 1.5rem; max-width: 380px; width: 100%; height: auto; display: flex; justify-content: center; align-items: center; }
-        .logo-img { width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(51, 204, 0, 0.15)) brightness(1.2); }
-        h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.025em; background: linear-gradient(to right, #ffffff, #e0aaff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-container { margin-bottom: 1rem; max-width: 500px; width: 100%; height: auto; display: flex; justify-content: center; align-items: center; }
+        .logo-img { width: 100%; height: auto; }
+        h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.025em; background: linear-gradient(to right, #ffffff, #e0aaff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0.5rem; }
         p.subtitle { color: #d4bfff; font-size: 1.05rem; max-width: 500px; line-height: 1.5; opacity: 0.9; }
         p.subtitle strong { color: var(--brand-primary); }
 
@@ -92,7 +92,28 @@
 <div class="container">
     <header>
         <div class="logo-container">
-            <img class="logo-img" src="https://upload.wikimedia.org/wikipedia/en/4/4e/Metronet_logo.png" alt="Metronet Logo">
+            <svg class="logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 120" width="100%">
+                <defs>
+                    <linearGradient id="fiberGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#33cc00" stop-opacity="0.2" />
+                        <stop offset="15%" stop-color="#33cc00" stop-opacity="1" />
+                        <stop offset="50%" stop-color="#51e2f5" stop-opacity="1" />
+                        <stop offset="85%" stop-color="#33cc00" stop-opacity="1" />
+                        <stop offset="100%" stop-color="#33cc00" stop-opacity="0.2" />
+                    </linearGradient>
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="5" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+                <path d="M 10,75 Q 130,15 250,60 T 490,45" fill="none" stroke="url(#fiberGlow)" stroke-width="5" filter="url(#glow)" />
+                <path d="M 10,75 Q 130,15 250,60 T 490,45" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.8" />
+                
+                <circle cx="210" cy="46" r="3" fill="#ffffff" filter="url(#glow)" />
+                <circle cx="360" cy="53" r="3" fill="#ffffff" filter="url(#glow)" />
+
+                <text x="50%" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="72" fill="#33cc00" text-anchor="middle" letter-spacing="-3">metro</text>
+            </svg>
         </div>
         <h1>Your Workspace Setup</h1>
         <p class="subtitle">Download tools, initialize accounts, and verify your configurations to activate your field environment.</p>
@@ -212,7 +233,7 @@
         {
             name: "NOC",
             dept: "Websites",
-            required: false,
+            required: true,
             desc: "Infrastructure maps mapping system portals.",
             instructions: "Enter your designated field credentials.",
             url: "https://esri.qservco.com/portal/apps/webappviewer/index.html?id=1493c6564b36486da7d3645af289ca95" 
@@ -220,7 +241,7 @@
         {
             name: "FTA",
             dept: "Websites",
-            required: false,
+            required: true,
             desc: "Field Tech Admin core dashboards tracker.",
             instructions: "Provide your authentication credentials to enter.",
             url: "https://webapps.metronet.com/fta/dashboard?iid=NTUwMDQwMzgyMjY4"
@@ -236,7 +257,7 @@
         {
             name: "GeoTab",
             dept: "Websites",
-            required: false,
+            required: true,
             desc: "Telemetry tracking portal to manage everything about your field truck.",
             instructions: "Use your corporate email, then input 'metro2020' for the initial password.",
             url: "https://www.geotab.com/mygeotab-login/"
