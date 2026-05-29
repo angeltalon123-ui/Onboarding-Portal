@@ -7,53 +7,54 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --brand-primary: #10b981; /* Neon Metronet Green Accent */
-            --brand-primary-hover: #059669;
-            --brand-dark: #111827; /* Rich Dark Space */
-            --brand-dark-card: #1f2937; /* Elevated Material Surface */
+            --brand-primary: #33cc00; /* Custom Metronet Green Accent */
+            --brand-primary-hover: #29a300;
+            --brand-purple: #7B2CBF; /* Custom Metronet Brand Purple */
+            --brand-dark: #0a0412; /* Deep Black-Purple base canvas */
+            --brand-dark-card: #150924; /* Elevated Plum-Purple card background */
             --apple: #ffffff;
-            --apple-text: #111827;
+            --apple-text: #0a0412;
             --android: #3ddc84;
             --android-text: #073013;
-            --bg: #0f172a; /* Deep tech background */
+            --bg: #0a0412; 
             --text: #f9fafb;
-            --text-muted: #9ca3af;
-            --border: #374151;
+            --text-muted: #d4bfff; /* Soft purple-tinted scannable prose text */
+            --border: #2c134d; /* Indigo-purple micro borders */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 3rem 1rem; background-image: radial-gradient(circle at top right, rgba(16, 185, 129, 0.08), transparent 45%); }
+        body { background-color: var(--bg); color: var(--text); padding: 3rem 1rem; background-image: radial-gradient(circle at top right, rgba(51, 204, 0, 0.07), transparent 45%), radial-gradient(circle at bottom left, rgba(123, 44, 191, 0.09), transparent 50%); }
         .container { max-width: 800px; margin: 0 auto; }
         
         /* Interactive Brand Header */
         header { text-align: center; margin-bottom: 2.5rem; display: flex; flex-direction: column; align-items: center; }
-        .logo-container { margin-bottom: 1.5rem; max-width: 240px; width: 100%; height: auto; display: flex; justify-content: center; align-items: center; }
-        .logo-img { width: 100%; height: auto; object-fit: contain; }
-        h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.025em; background: linear-gradient(to right, #ffffff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        p.subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 500px; line-height: 1.5; }
+        .logo-container { margin-bottom: 1.5rem; max-width: 200px; width: 100%; height: auto; display: flex; justify-content: center; align-items: center; }
+        .logo-img { width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(51, 204, 0, 0.15)); }
+        h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.025em; background: linear-gradient(to right, #ffffff, #e0aaff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p.subtitle { color: #d4bfff; font-size: 1.05rem; max-width: 500px; line-height: 1.5; opacity: 0.9; }
         p.subtitle strong { color: var(--brand-primary); }
 
         /* Progress Dashboard Box */
-        .progress-container { background: var(--brand-dark-card); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 2.5rem; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
-        .progress-container::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--brand-primary); }
-        .progress-text { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: #e5e7eb; }
-        .progress-bar-bg { background: rgba(255,255,255,0.08); height: 12px; border-radius: 6px; overflow: hidden; }
-        .progress-bar-fill { background: linear-gradient(90deg, var(--brand-primary), #6ee7b7); height: 100%; width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .progress-container { background: var(--brand-dark-card); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 2.5rem; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.4); position: relative; overflow: hidden; }
+        .progress-container::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--brand-purple); }
+        .progress-text { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: #f3e8ff; }
+        .progress-bar-bg { background: rgba(255,255,255,0.04); height: 12px; border-radius: 6px; overflow: hidden; }
+        .progress-bar-fill { background: linear-gradient(90deg, var(--brand-primary), #51e2f5); height: 100%; width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
         /* Dynamic Mode Switching Tabs */
-        .filters { display: flex; gap: 0.75rem; margin-bottom: 2rem; background: rgba(31, 41, 55, 0.6); padding: 0.4rem; border-radius: 30px; border: 1px solid var(--border); width: max-content; }
-        .filter-btn { background: transparent; border: none; padding: 0.6rem 1.5rem; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.9rem; color: var(--text-muted); transition: all 0.25s ease; }
+        .filters { display: flex; gap: 0.75rem; margin-bottom: 2rem; background: rgba(21, 9, 36, 0.8); padding: 0.4rem; border-radius: 30px; border: 1px solid var(--border); width: max-content; }
+        .filter-btn { background: transparent; border: none; padding: 0.6rem 1.5rem; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.9rem; color: #e0aaff; transition: all 0.25s ease; }
         .filter-btn:hover { color: white; }
-        .filter-btn.active { background: var(--brand-primary); color: var(--brand-dark); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+        .filter-btn.active { background: var(--brand-purple); color: white; box-shadow: 0 4px 12px rgba(123, 44, 191, 0.4); }
 
         /* Refreshed List Shell */
         .apps-list { display: flex; flex-direction: column; gap: 1.25rem; }
         .app-card { background: var(--brand-dark-card); border: 1px solid var(--border); padding: 1.5rem; border-radius: 16px; display: flex; align-items: flex-start; gap: 1.25rem; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; position: relative; }
-        .app-card:hover { transform: translateY(-2px); border-color: #4b5563; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4); }
+        .app-card:hover { transform: translateY(-2px); border-color: #5a189a; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
         
-        /* Completion States */
-        .app-card.checked { border-color: var(--brand-primary); background-image: linear-gradient(145deg, var(--brand-dark-card), rgba(16, 185, 129, 0.03)); }
-        .app-card.checked::after { content: '✓'; position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(16, 185, 129, 0.15); color: var(--brand-primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; }
+        /* Completion States matched to True Green Theme */
+        .app-card.checked { border-color: var(--brand-primary); background-image: linear-gradient(145deg, var(--brand-dark-card), rgba(51, 204, 0, 0.02)); }
+        .app-card.checked::after { content: '✓'; position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(51, 204, 0, 0.15); color: var(--brand-primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; border: 1px solid rgba(51, 204, 0, 0.3); }
 
         /* Checkbox Custom styling */
         .checkbox-wrapper { padding-top: 0.25rem; }
@@ -65,15 +66,15 @@
         /* Modernized Badges */
         .badge { font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
         .badge.required { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .badge.dept { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .badge.dept { background: rgba(123, 44, 191, 0.2); color: #e0aaff; border: 1px solid rgba(123, 44, 191, 0.3); }
         
-        .app-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.4; }
-        .app-instructions { font-size: 0.88rem; background: rgba(15, 23, 42, 0.6); padding: 0.75rem 1rem; border-radius: 10px; margin-bottom: 1rem; border-left: 3px solid #6b7280; color: #d1d5db; }
+        .app-desc { color: #e0aaff; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.4; opacity: 0.85; }
+        .app-instructions { font-size: 0.88rem; background: rgba(10, 4, 18, 0.6); padding: 0.75rem 1rem; border-radius: 10px; margin-bottom: 1rem; border-left: 3px solid var(--brand-purple); color: #f3e8ff; }
 
         /* Re-engineered Link Hub Controls */
         .btn-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
-        .btn-link { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); color: #ffffff; border: 1px solid var(--border); text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; cursor: pointer; }
-        .btn-link:hover { background: rgba(255,255,255,0.1); border-color: #9ca3af; }
+        .btn-link { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.04); color: #ffffff; border: 1px solid var(--border); text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; cursor: pointer; }
+        .btn-link:hover { background: rgba(123, 44, 191, 0.15); border-color: var(--brand-purple); }
         
         /* Specific Native Sub-styles */
         .btn-link.apple { background: var(--apple); color: var(--apple-text); border: none; }
@@ -90,9 +91,8 @@
 
 <div class="container">
     <header>
-        <!-- Embedded Metronet Brand Logo Asset -->
         <div class="logo-container">
-            <img class="logo-img" src="https://dm12lgf5m7bd0.cloudfront.net/_1200x630_crop_center-center_82_none/metronet-facebook-opengraph-2024-v1.jpg" alt="Metronet Logo">
+            <img class="logo-img" src="https://cdn.freebiesupply.com/logos/large/2x/metronet-internet-logo-svg-vector.svg" alt="Metronet Transparent Logo">
         </div>
         <h1>Your Workspace Setup</h1>
         <p class="subtitle">Download tools, initialize accounts, and verify your configurations to activate your field environment.</p>
