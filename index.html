@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee App Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --text: #111827;
+            --text-muted: #4b5563;
+            --border: #e5e7eb;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 2rem; }
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--text); }
+        p.subtitle { color: var(--text-muted); }
+
+        /* Progress Bar */
+        .progress-container { background: var(--card-bg); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem; }
+        .progress-text { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        .progress-bar-bg { background: var(--border); height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.3s ease; }
+
+        /* Filters */
+        .filters { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* App Cards */
+        .apps-list { display: flex; flex-direction: column; gap: 1rem; }
+        .app-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.25rem; border-radius: 12px; display: flex; align-items: flex-start; gap: 1rem; transition: transform 0.2s, box-shadow 0.2s; }
+        .app-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .app-card.checked { border-color: #10b981; background-color: #f0fdf4; }
+
+        .checkbox-wrapper { padding-top: 0.2rem; }
+        .checkbox-wrapper input { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: #10b981; }
+
+        .app-details { flex-grow: 1; }
+        .app-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
+        .badge { font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold; }
+        .badge.required { background: #fee2e2; color: #ef4444; }
+        .badge.dept { background: #e0e7ff; color: #4338ca; }
+        
+        .app-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
+        .app-instructions { font-size: 0.85rem; background: #f3f4f6; padding: 0.5rem 0.75rem; border-radius: 6px; margin-bottom: 0.75rem; border-left: 3px solid var(--text-muted); }
+
+        .btn-link { display: inline-flex; align-items: center; background: var(--primary); color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500; transition: background 0.2s; }
+        .btn-link:hover { background: var(--primary-hover); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Your Workspace Setup</h1>
+        <p class="subtitle">Select your department, download your tools, and check them off as you go.</p>
+    </header>
+
+    <div class="progress-container">
+        <div class="progress-text">
+            <span>Setup Progress</span>
+            <span id="progress-count">0 of 0 completed</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div id="progress-fill" class="progress-bar-fill"></div>
+        </div>
+    </div>
+
+    <div class="filters" id="filter-container">
+        <button class="filter-btn active" onclick="filterDept('All')">All Apps</button>
+    </div>
+
+    <div class="apps-list" id="apps-container"></div>
+</div>
+
+<script>
+    // ==========================================
+    // EDIT YOUR APPS AND LINKS HERE
+    // ==========================================
+    const appsData = [
+        {
+            name: "Slack",
+            dept: "General",
+            required: true,
+            desc: "Our primary team communication and chat tool.",
+            instructions: "Log in using 'Sign in with Google' using your company email.",
+            url: "https://slack.com/download"
+        },
+        {
+            name: "Notion",
+            dept: "General",
+            required: true,
+            desc: "Company wiki, documentation, and handbook central.",
+            instructions: "Check your inbox for an email invitation to join our workspace.",
+            url: "https://notion.so"
+        },
+        {
+            name: "GitHub Desktop",
+            dept: "Engineering",
+            required: false,
+            desc: "GUI client to manage git repositories and code.",
+            instructions: "Connect your approved personal GitHub account to the organization profile.",
+            url: "https://desktop.github.com"
+        },
+        {
+            name: "Figma",
+            dept: "Design",
+            required: false,
+            desc: "Collaborative design and prototyping tool platform.",
+            instructions: "Ask your manager to provision a professional seat via our IT ticket portal.",
+            url: "https://figma.com/download"
+        },
+        {
+            name: "HubSpot",
+            dept: "Marketing",
+            required: true,
+            desc: "Our primary CRM and marketing automation engine.",
+            instructions: "Set up 2-Factor Authentication immediately upon your first login.",
+            url: "https://app.hubspot.com"
+        }
+    ];
+
+    let currentFilter = 'All';
+
+    // Build unique department filters automatically
+    function initFilters() {
+        const depts = ['All', ...new Set(appsData.map(app => app.dept))];
+        const container = document.getElementById('filter-container');
+        container.innerHTML = '';
+        depts.forEach(dept => {
+            const btn = document.createElement('button');
+            btn.className = `filter-btn ${dept === currentFilter ? 'active' : ''}`;
+            btn.innerText = dept === 'All' ? 'All Apps' : dept;
+            btn.onclick = () => filterDept(dept);
+            container.appendChild(btn);
+        });
+    }
+
+    // Render the list of apps based on filters
+    function renderApps() {
+        const container = document.getElementById('apps-container');
+        container.innerHTML = '';
+
+        const filtered = appsData.filter(app => currentFilter === 'All' || app.dept === currentFilter);
+
+        filtered.forEach((app, index) => {
+            const isChecked = localStorage.getItem(`app-${app.name}`) === 'true';
+            
+            const card = document.createElement('div');
+            card.className = `app-card ${isChecked ? 'checked' : ''}`;
+            card.id = `card-${index}`;
+
+            card.innerHTML = `
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="check-${index}" ${isChecked ? 'checked' : ''} onchange="toggleApp('${app.name}', ${index})">
+                </div>
+                <div class="app-details">
+                    <div class="app-title">
+                        ${app.name}
+                        ${app.required ? '<span class="badge required">Required</span>' : ''}
+                        <span class="badge dept">${app.dept}</span>
+                    </div>
+                    <div class="app-desc">${app.desc}</div>
+                    ${app.instructions ? `<div class="app-instructions"><strong>Setup:</strong> ${app.instructions}</div>` : ''}
+                    <a href="${app.url}" target="_blank" class="btn-link">Get ${app.name} &rarr;</a>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        updateProgress();
+    }
+
+    function filterDept(dept) {
+        currentFilter = dept;
+        initFilters();
+        renderApps();
+    }
+
+    function toggleApp(appName, index) {
+        const checkbox = document.getElementById(`check-${index}`);
+        const card = document.getElementById(`card-${index}`);
+        
+        localStorage.setItem(`app-${appName}`, checkbox.checked);
+        
+        if (checkbox.checked) {
+            card.classList.add('checked');
+        } else {
+            card.classList.remove('checked');
+        }
+        
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const total = appsData.length;
+        let completed = 0;
+        
+        appsData.forEach(app => {
+            if (localStorage.getItem(`app-${app.name}`) === 'true') completed++;
+        });
+
+        const percent = total > 0 ? (completed / total) * 100 : 0;
+        document.getElementById('progress-fill').style.width = `${percent}%`;
+        document.getElementById('progress-count').innerText = `${completed} of ${total} completed`;
+
+        if (completed === total && total > 0) {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+    }
+
+    // Initialize
+    initFilters();
+    renderApps();
+</script>
+
+</body>
+</html>
