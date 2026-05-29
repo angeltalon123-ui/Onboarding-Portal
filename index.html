@@ -27,8 +27,8 @@
         
         /* Interactive Brand Header */
         header { text-align: center; margin-bottom: 2.5rem; display: flex; flex-direction: column; align-items: center; }
-        .logo-wrapper { margin-bottom: 1rem; background: linear-gradient(135deg, #10b981, #3b82f6); padding: 12px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3); display: inline-flex; justify-content: center; align-items: center; }
-        .logo-icon { width: 40px; height: 40px; fill: white; }
+        .logo-container { margin-bottom: 1.5rem; max-width: 240px; width: 100%; height: auto; display: flex; justify-content: center; align-items: center; }
+        .logo-img { width: 100%; height: auto; object-fit: contain; }
         h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.025em; background: linear-gradient(to right, #ffffff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         p.subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 500px; line-height: 1.5; }
         p.subtitle strong { color: var(--brand-primary); }
@@ -90,10 +90,9 @@
 
 <div class="container">
     <header>
-        <div class="logo-wrapper">
-            <svg class="logo-icon" viewBox="0 0 24 24">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
+        <!-- Embedded Metronet Brand Logo Asset -->
+        <div class="logo-container">
+            <img class="logo-img" src="https://dm12lgf5m7bd0.cloudfront.net/_1200x630_crop_center-center_82_none/metronet-facebook-opengraph-2024-v1.jpg" alt="Metronet Logo">
         </div>
         <h1>Your Workspace Setup</h1>
         <p class="subtitle">Download tools, initialize accounts, and verify your configurations to activate your field environment.</p>
@@ -119,9 +118,6 @@
 </div>
 
 <script>
-    // ==========================================
-    // DATA MATRIX: YOUR SAVED TOOLS LIST
-    // ==========================================
     const appsData = [
         {
             name: "AirPort Utility",
@@ -265,7 +261,6 @@
 
     let currentFilter = 'All';
 
-    // Device operating system sniffing layer
     function getDeviceOS() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
         if (/android/i.test(userAgent)) return "Android";
