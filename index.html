@@ -7,77 +7,101 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --apple: #000000;
+            --brand-primary: #10b981; /* Neon Metronet Green Accent */
+            --brand-primary-hover: #059669;
+            --brand-dark: #111827; /* Rich Dark Space */
+            --brand-dark-card: #1f2937; /* Elevated Material Surface */
+            --apple: #ffffff;
+            --apple-text: #111827;
             --android: #3ddc84;
             --android-text: #073013;
-            --bg: #f9fafb;
-            --card-bg: #ffffff;
-            --text: #111827;
-            --text-muted: #4b5563;
-            --border: #e5e7eb;
+            --bg: #0f172a; /* Deep tech background */
+            --text: #f9fafb;
+            --text-muted: #9ca3af;
+            --border: #374151;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; }
+        body { background-color: var(--bg); color: var(--text); padding: 3rem 1rem; background-image: radial-gradient(circle at top right, rgba(16, 185, 129, 0.08), transparent 45%); }
         .container { max-width: 800px; margin: 0 auto; }
         
-        header { text-align: center; margin-bottom: 2rem; }
-        h1 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--text); }
-        p.subtitle { color: var(--text-muted); }
+        /* Interactive Brand Header */
+        header { text-align: center; margin-bottom: 2.5rem; display: flex; flex-direction: column; align-items: center; }
+        .logo-wrapper { margin-bottom: 1rem; background: linear-gradient(135deg, #10b981, #3b82f6); padding: 12px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3); display: inline-flex; justify-content: center; align-items: center; }
+        .logo-icon { width: 40px; height: 40px; fill: white; }
+        h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.025em; background: linear-gradient(to right, #ffffff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p.subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 500px; line-height: 1.5; }
+        p.subtitle strong { color: var(--brand-primary); }
 
-        /* Progress Bar */
-        .progress-container { background: var(--card-bg); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem; }
-        .progress-text { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
-        .progress-bar-bg { background: var(--border); height: 10px; border-radius: 5px; overflow: hidden; }
-        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.3s ease; }
+        /* Progress Dashboard Box */
+        .progress-container { background: var(--brand-dark-card); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 2.5rem; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+        .progress-container::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--brand-primary); }
+        .progress-text { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: #e5e7eb; }
+        .progress-bar-bg { background: rgba(255,255,255,0.08); height: 12px; border-radius: 6px; overflow: hidden; }
+        .progress-bar-fill { background: linear-gradient(90deg, var(--brand-primary), #6ee7b7); height: 100%; width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* Filters */
-        .filters { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
-        .filter-btn { background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s; }
-        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        /* Dynamic Mode Switching Tabs */
+        .filters { display: flex; gap: 0.75rem; margin-bottom: 2rem; background: rgba(31, 41, 55, 0.6); padding: 0.4rem; border-radius: 30px; border: 1px solid var(--border); width: max-content; }
+        .filter-btn { background: transparent; border: none; padding: 0.6rem 1.5rem; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.9rem; color: var(--text-muted); transition: all 0.25s ease; }
+        .filter-btn:hover { color: white; }
+        .filter-btn.active { background: var(--brand-primary); color: var(--brand-dark); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
 
-        /* App Cards */
-        .apps-list { display: flex; flex-direction: column; gap: 1rem; }
-        .app-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.25rem; border-radius: 12px; display: flex; align-items: flex-start; gap: 1rem; transition: transform 0.2s, box-shadow 0.2s; }
-        .app-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .app-card.checked { border-color: #10b981; background-color: #f0fdf4; }
-
-        .checkbox-wrapper { padding-top: 0.2rem; }
-        .checkbox-wrapper input { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: #10b981; }
-
-        .app-details { flex-grow: 1; }
-        .app-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
-        .badge { font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold; }
-        .badge.required { background: #fee2e2; color: #ef4444; }
-        .badge.dept { background: #e0e7ff; color: #4338ca; }
+        /* Refreshed List Shell */
+        .apps-list { display: flex; flex-direction: column; gap: 1.25rem; }
+        .app-card { background: var(--brand-dark-card); border: 1px solid var(--border); padding: 1.5rem; border-radius: 16px; display: flex; align-items: flex-start; gap: 1.25rem; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; position: relative; }
+        .app-card:hover { transform: translateY(-2px); border-color: #4b5563; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4); }
         
-        .app-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
-        .app-instructions { font-size: 0.85rem; background: #f3f4f6; padding: 0.5rem 0.75rem; border-radius: 6px; margin-bottom: 0.75rem; border-left: 3px solid var(--text-muted); }
+        /* Completion States */
+        .app-card.checked { border-color: var(--brand-primary); background-image: linear-gradient(145deg, var(--brand-dark-card), rgba(16, 185, 129, 0.03)); }
+        .app-card.checked::after { content: '✓'; position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(16, 185, 129, 0.15); color: var(--brand-primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; }
 
-        /* Buttons styling */
-        .btn-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .btn-link { display: inline-flex; align-items: center; background: var(--primary); color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500; transition: opacity 0.2s; cursor: pointer; }
-        .btn-link:hover { opacity: 0.9; }
+        /* Checkbox Custom styling */
+        .checkbox-wrapper { padding-top: 0.25rem; }
+        .checkbox-wrapper input { width: 1.35rem; height: 1.35rem; cursor: pointer; accent-color: var(--brand-primary); border-radius: 6px; }
+
+        .app-details { flex-grow: 1; padding-right: 2rem; }
+        .app-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.6rem; color: #ffffff; }
         
-        .btn-link.apple { background: var(--apple); color: white; }
-        .btn-link.android { background: var(--android); color: var(--android-text); }
-        .btn-link.detected { outline: 3px solid #10b981; position: relative; }
-        .btn-link.detected::after { content: " (Suggested)"; font-size: 0.75rem; opacity: 0.8; margin-left: 4px; }
+        /* Modernized Badges */
+        .badge { font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+        .badge.required { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .badge.dept { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+        
+        .app-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.4; }
+        .app-instructions { font-size: 0.88rem; background: rgba(15, 23, 42, 0.6); padding: 0.75rem 1rem; border-radius: 10px; margin-bottom: 1rem; border-left: 3px solid #6b7280; color: #d1d5db; }
+
+        /* Re-engineered Link Hub Controls */
+        .btn-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+        .btn-link { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); color: #ffffff; border: 1px solid var(--border); text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; cursor: pointer; }
+        .btn-link:hover { background: rgba(255,255,255,0.1); border-color: #9ca3af; }
+        
+        /* Specific Native Sub-styles */
+        .btn-link.apple { background: var(--apple); color: var(--apple-text); border: none; }
+        .btn-link.apple:hover { background: #e5e7eb; }
+        .btn-link.android { background: var(--android); color: var(--android-text); border: none; }
+        .btn-link.android:hover { background: #34c777; }
+        
+        /* Device Auto-Target Suggestion Rings */
+        .btn-link.detected { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+        .btn-link.detected::after { content: "•"; color: currentColor; font-size: 1.2rem; margin-left: 2px; line-height: 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
+        <div class="logo-wrapper">
+            <svg class="logo-icon" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+        </div>
         <h1>Your Workspace Setup</h1>
-        <p class="subtitle">Download required apps, save key bookmarks, and check them off as you go.</p>
+        <p class="subtitle">Download tools, initialize accounts, and verify your configurations to activate your field environment.</p>
     </header>
 
     <div class="progress-container">
         <div class="progress-text">
-            <span>Setup Progress</span>
+            <span>Onboarding Checklist Progress</span>
             <span id="progress-count">0 of 0 completed</span>
         </div>
         <div class="progress-bar-bg">
@@ -175,7 +199,7 @@
             name: "UKG Pro",
             dept: "Apps",
             required: true,
-            desc: "Pay,Timeoff,and etc.",
+            desc: "Access your paystubs, time-off requests, and HR documentation.",
             instructions: "Log in with your provided workspace account.",
             appleUrl: "https://apps.apple.com/us/app/ukg-pro/id6445849909",
             androidUrl: "https://play.google.com/store/search?q=ukg&c=apps&hl=en"
@@ -184,7 +208,7 @@
             name: "UKG Learning",
             dept: "Apps",
             required: true,
-            desc: "Training App.",
+            desc: "Corporate training and compliance platform application.",
             instructions: "Log in with your provided workspace account.",
             appleUrl: "https://apps.apple.com/app/id1217651900",
             androidUrl: "https://play.google.com/store/search?q=ukg+learning&c=apps&hl=en"
@@ -193,55 +217,55 @@
             name: "NOC",
             dept: "Websites",
             required: true,
-            desc: "Infrastructure maps.",
-            instructions: "Enter credentials.",
+            desc: "Infrastructure maps mapping system portals.",
+            instructions: "Enter your designated field credentials.",
             url: "https://esri.qservco.com/portal/apps/webappviewer/index.html?id=1493c6564b36486da7d3645af289ca95" 
         },
         {
             name: "FTA",
             dept: "Websites",
             required: true,
-            desc: "Field Tech Admin.",
-            instructions: "Put in credentials.",
+            desc: "Field Tech Admin core dashboards tracker.",
+            instructions: "Provide your authentication credentials to enter.",
             url: "https://webapps.metronet.com/fta/dashboard?iid=NTUwMDQwMzgyMjY4"
         },
         {
             name: "Install Drop Ont",
             dept: "Websites",
             required: false,
-            desc: "Form to put in a temp drop fix.",
-            instructions: "Follow the prompt.",
+            desc: "Form to submit a temporary drop fix configuration.",
+            instructions: "Follow the sequential on-screen document prompts.",
             url: "https://app.smartsheet.com/b/form/0d5b0d79e0ca49f78db0d03049c67011"
         },
         {
             name: "GeoTab",
             dept: "Websites",
             required: true,
-            desc: "Track everything about your truck.",
-            instructions: "Your email then metro2020 for the password.",
+            desc: "Telemetry tracking portal to manage everything about your field truck.",
+            instructions: "Use your corporate email, then input 'metro2020' for the initial password.",
             url: "https://www.geotab.com/mygeotab-login/"
         },
         {
             name: "Time-Off",
             dept: "Websites",
             required: false,
-            desc: "Time Off Calendar.",
-            instructions: "Put in your time off.",
+            desc: "Internal scheduling Time Off Calendar form.",
+            instructions: "Log and submit your requested out-of-office blocks.",
             url: "https://app.smartsheet.com/b/form/c5dc13b063a7423ebc11085819f7ae36"
         },
         {
             name: "Spokeo",
             dept: "Websites",
             required: false,
-            desc: "Home sq footage.",
-            instructions: "Input homes address.",
+            desc: "Real estate lookups tool for verifying home square footage metrics.",
+            instructions: "Input the specific active residential service address.",
             url: "https://www.spokeo.com/"
         }
     ];
 
     let currentFilter = 'All';
 
-    // Hardware checks to auto-suggest appropriate mobile store listings
+    // Device operating system sniffing layer
     function getDeviceOS() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
         if (/android/i.test(userAgent)) return "Android";
@@ -267,14 +291,14 @@
             
             if (app.appleUrl) {
                 const isDetected = (userOS === "iOS");
-                buttonsHtml += `<a href="${app.appleUrl}" target="_blank" class="btn-link apple ${isDetected ? 'detected' : ''}" onclick="smartCheck('${app.name}', ${index})">Download for Apple</a>`;
+                buttonsHtml += `<a href="${app.appleUrl}" target="_blank" class="btn-link apple ${isDetected ? 'detected' : ''}" onclick="smartCheck('${app.name}', ${index})">Apple Store</a>`;
             }
-            if (app.androidUrl && app.androidUrl !== "PLACEHOLDER_LINK") {
+            if (app.androidUrl) {
                 const isDetected = (userOS === "Android");
-                buttonsHtml += `<a href="${app.androidUrl}" target="_blank" class="btn-link android ${isDetected ? 'detected' : ''}" onclick="smartCheck('${app.name}', ${index})">Download for Android</a>`;
+                buttonsHtml += `<a href="${app.androidUrl}" target="_blank" class="btn-link android ${isDetected ? 'detected' : ''}" onclick="smartCheck('${app.name}', ${index})">Google Play</a>`;
             }
             if (app.url) {
-                buttonsHtml += `<a href="${app.url}" target="_blank" class="btn-link" onclick="smartCheck('${app.name}', ${index})">Go to Website &rarr;</a>`;
+                buttonsHtml += `<a href="${app.url}" target="_blank" class="btn-link" onclick="smartCheck('${app.name}', ${index})">Launch Portal Site &rarr;</a>`;
             }
             
             buttonsHtml += '</div>';
@@ -302,15 +326,10 @@
 
     function filterDept(dept) {
         currentFilter = dept;
-        
-        // Remove active class from all filter buttons
         document.getElementById('btn-All').classList.remove('active');
         document.getElementById('btn-Apps').classList.remove('active');
         document.getElementById('btn-Websites').classList.remove('active');
-        
-        // Add active class to clicked target
         document.getElementById(`btn-${dept}`).classList.add('active');
-        
         renderApps();
     }
 
@@ -327,13 +346,11 @@
         const card = document.getElementById(`card-${index}`);
         
         localStorage.setItem(`app-${appName}`, checkbox.checked);
-        
         if (checkbox.checked) {
             card.classList.add('checked');
         } else {
             card.classList.remove('checked');
         }
-        
         updateProgress();
     }
 
@@ -354,7 +371,6 @@
         }
     }
 
-    // Fire application engine rendering cycle
     renderApps();
 </script>
 
